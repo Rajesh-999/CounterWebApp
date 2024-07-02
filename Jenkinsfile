@@ -2,25 +2,25 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout') {
+        stage('checkout') {
             steps {
-                git 'https://github.com/rameshkalluri/CounterWebApp.git'
+                git 'https://github.com/Rajesh-999/CounterWebApp.git'
             }
         }
-        stage("maven Build"){
+        stage('maven build'){
             steps{
                 if (isUnix()) {
                     sh " mvn clean install"
-                } else{
-                     bat '''set MAVEN_HOME=C:\\ProgramData\\chocolatey\\lib\\maven\\apache-maven-3.9.8
-                    set PATH=%MAVEN_HOME%\\bin;%PATH%
-                    mvn clean install'''
+                } else {
+                bat '''set MAVEN_HOME=C:\\ProgramData\\chocolatey\\lib\\maven\\apache-maven-3.9.8
+                set PATH=%MAVEN_HOME%\\bin;%PATH%
+                mvn clean install'''
                 }
-            }
+            }	
         }
-        stage("deploy to container"){
+        stage('deploy to build'){
             steps{
-                deploy adapters: [tomcat9(credentialsId: 'tomcatadmin', path: '', url: 'http://3.208.9.238:8080/')], contextPath: null, war: '**/*.war'
+                deploy adapters: [tomcat9(credentialsId: 'admin', path: '', url: 'http://51.20.42.183:8081/')], contextPath: null, war: '**/*.war'
             }
         }
     }
